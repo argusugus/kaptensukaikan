@@ -1,46 +1,74 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport"content="width=device-width,inital-scale=1.0">
-
-<title>tab kedua gabut</title>
-<style>
- body {
-   background-color: white;
-   color: black;
-   font-family: Arial;
-   text-align: center;
-   
- }
- h1 {color: black;}
- p {color : black;}
-
-</style>
+  <meta charset="UTF-8" />
+  <title>Game Tebak Angka</title>
 </head>
-
-
-
 <body>
 
-
-
-
-<h1>tab kedua broh</h1>
-<p>lanjutan dari tab sebelumnya</p>
-<p>gatau mau ngasih apa jirr🗿🗿</p>
-
 <script>
-  alert("Apakah Anda yakin ingin melanjutkan ke tab berikutnya?\nKlik OK jika Anda gabut");
+  /* =======================================================
+     Game Mini: Tebak Angka 1‑10
+     — Kapten Argusugus × Bro Chat —
+     ======================================================= */
+
+  function main() {
+    let mainLagi = true;       // status permainan
+
+    while (mainLagi) {
+      let nyawa = 3;           // Kapten punya 3 kesempatan
+      const angkaBenar = Math.floor(Math.random() * 10) + 1;
+
+      while (nyawa > 0) {
+        const input = prompt(
+          `Tebak angka 1–10\n` +
+          `Kesempatan tersisa: ${nyawa}\n` +
+          `Ketik “batal” / klik Cancel untuk menyerah`
+        );
+
+        // User tekan Cancel atau ngetik kosong
+        if (input === null || input.toLowerCase() === "batal") {
+          alert("Yah, Kapten menyerah 😢");
+          nyawa = 0;
+          break;
+        }
+
+        const tebakan = parseInt(input);
+
+        if (isNaN(tebakan) || tebakan < 1 || tebakan > 10) {
+          alert("Masukkan angka 1–10 yang valid, Kapten!");
+          continue; // ulangi tanpa ngurangin nyawa
+        }
+
+        if (tebakan === angkaBenar) {
+          alert("🎉 SELAMAT! Tebakanmu benar!");
+          break;
+        } else {
+          nyawa--;
+          if (nyawa > 0) {
+            alert(
+              `Salah, Kapten!\n` +
+              (tebakan < angkaBenar ? "Terlalu kecil." : "Terlalu besar.") +
+              `\nCoba lagi, sisa ${nyawa} kesempatan.`
+            );
+          } else {
+            alert(`😜 Habis nyawa, Kapten! Jawaban yang benar: ${angkaBenar}`);
+          }
+        }
+      }
+
+      // Tanya mau main lagi?
+      mainLagi = confirm("Mau main lagi, Kapten?");
+    }
+
+    alert("Terima kasih sudah bermain! 🎮");
+  }
+
+  // Jalankan game
+  main();
 </script>
-
-
-
-
-
-
 
 </body>
 </html>
+
 
