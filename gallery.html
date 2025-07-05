@@ -2,70 +2,85 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Game Tebak Angka</title>
+  <title>Tebak Angka – Level Easy / Hard</title>
 </head>
 <body>
 
 <script>
-  /* =======================================================
-     Game Mini: Tebak Angka 1‑10
-     — Kapten Argusugus × Bro Chat —
-     ======================================================= */
+/* ======================================================
+   ▼▼  BAGIAN CONFIG – SILAKAN KAPTEN EDIT  ▼▼
+   Ubah angka di "max" & "lives" sesuai selera
+   ====================================================== */
+const LEVELS = {
+  easy : { max: 10,  lives: 7 },   // ✂ EDIT DI SINI (range & nyawa level Easy)
+  hard : { max: 50,  lives: 5 },   // ✂ EDIT DI SINI (range & nyawa level Hard)
+  // Kapten bisa tambah level baru, contoh:
+  // insane: { max: 100, lives: 1 }
+};
+/* ======================================================
+   ▲▲  SELESAI CONFIG  ▲▲
+   Jangan utak‑atik baris di bawah kecuali mau ngoding lebih jauh!
+   ====================================================== */
 
-  function main() {
-    let mainLagi = true;       // status permainan
+function main() {
+  let mainLagi = true;
 
-    while (mainLagi) {
-      let nyawa = 3;           // Kapten punya 3 kesempatan
-      const angkaBenar = Math.floor(Math.random() * 10) + 1;
+  while (mainLagi) {
+    /* 1) Pilih level */
+    const levelKeys = Object.keys(LEVELS);
+    const menuText = levelKeys
+      .map((k, i) => `${i + 1} = ${k.toUpperCase()} (1–${LEVELS[k].max})`)
+      .join("\n");
 
-      while (nyawa > 0) {
-        const input = prompt(
-          `Tebak angka 1–10\n` +
-          `Kesempatan tersisa: ${nyawa}\n` +
-          `Ketik “batal” / klik Cancel untuk menyerah`
-        );
+    const levelInput = prompt(
+      "PILIH LEVEL:\n" + menuText +
+      "\nCancel untuk keluar."
+    );
+    if (levelInput === null) break;
 
-        // User tekan Cancel atau ngetik kosong
-        if (input === null || input.toLowerCase() === "batal") {
-          alert("Yah, Kapten menyerah 😢");
-          nyawa = 0;
-          break;
-        }
-
-        const tebakan = parseInt(input);
-
-        if (isNaN(tebakan) || tebakan < 1 || tebakan > 10) {
-          alert("Masukkan angka 1–10 yang valid, Kapten!");
-          continue; // ulangi tanpa ngurangin nyawa
-        }
-
-        if (tebakan === angkaBenar) {
-          alert("🎉 SELAMAT! Tebakanmu benar!");
-          break;
-        } else {
-          nyawa--;
-          if (nyawa > 0) {
-            alert(
-              `Salah, Kapten!\n` +
-              (tebakan < angkaBenar ? "Terlalu kecil." : "Terlalu besar.") +
-              `\nCoba lagi, sisa ${nyawa} kesempatan.`
-            );
-          } else {
-            alert(`😜 Habis nyawa, Kapten! Jawaban yang benar: ${angkaBenar}`);
-          }
-        }
-      }
-
-      // Tanya mau main lagi?
-      mainLagi = confirm("Mau main lagi, Kapten?");
+    const idx = parseInt(levelInput) - 1;
+    if (isNaN(idx) || !levelKeys[idx]) {
+      alert("Input tidak valid! Masukkan nomor menu.");
+      continue; // balik ke menu
     }
 
-    alert("Terima kasih sudah bermain! 🎮");
+    const { max, lives } = LEVELS[levelKeys[idx]];
+    let nyawa = lives;
+    const angkaBenar = Math.floor(Math.random() * max) + 1;
+
+    /* 2) Loop Tebakan */
+    while (nyawa > 0) {
+      const t = prompt(`Tebak angka 1–${max}\nNyawa: ${nyawa}`);
+      if (t === null) { alert("Menyerah 😢"); break; }
+
+      const n = parseInt(t);
+      if (isNaN(n) || n < 1 || n > max) {
+        alert(`Masukkan angka 1–${max} yang valid!`);
+        continue;
+      }
+
+      if (n === angkaBenar) {
+        alert("🎉 BENAR! Kamu menang!");
+        break;
+      } else {
+        nyawa--;
+        alert(
+          nyawa
+            ? `${n < angkaBenar ? "Terlalu kecil" : "Terlalu besar"}!\nCoba lagi.`
+            : `😜 GAME OVER!\nJawaban benar: ${angkaBenar}`
+        );
+      }
+    }
+
+    /* 3) Tanya main lagi */
+    mainLagi = confirm("Main lagi, Kapten?");
   }
 
-  // Jalankan game
-  main();
+  alert("Terima kasih sudah bermain! 🎮");
+}
+
+/* 4) Jalankan game */
+main();
 </script>
 
 </body>
