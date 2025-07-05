@@ -2,88 +2,81 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Tebak Angka – Level Easy / Hard</title>
+  <title>Game Tebak Angka – Easy / Hard</title>
 </head>
 <body>
 
 <script>
-/* ======================================================
-   ▼▼  BAGIAN CONFIG – SILAKAN KAPTEN EDIT  ▼▼
-   Ubah angka di "max" & "lives" sesuai selera
-   ====================================================== */
+/* ===== CONFIG LEVEL – bebas Kapten ubah ===== */
 const LEVELS = {
-  easy : { max: 10,  lives: 7 },   // ✂ EDIT DI SINI (range & nyawa level Easy)
-  hard : { max: 50,  lives: 5 },   // ✂ EDIT DI SINI (range & nyawa level Hard)
-  // Kapten bisa tambah level baru, contoh:
-  // insane: { max: 100, lives: 1 }
+  easy : { max: 10,  lives: 7 },
+  hard : { max: 50,  lives: 5 }
 };
-/* ======================================================
-   ▲▲  SELESAI CONFIG  ▲▲
-   Jangan utak‑atik baris di bawah kecuali mau ngoding lebih jauh!
-   ====================================================== */
+/* ============================================ */
 
 function main() {
-  let mainLagi = true;
+  let mainLagi = true;     // loop semua ronde
 
   while (mainLagi) {
-    /* 1) Pilih level */
-    const levelKeys = Object.keys(LEVELS);
-    const menuText = levelKeys
-      .map((k, i) => `${i + 1} = ${k.toUpperCase()} (1–${LEVELS[k].max})`)
-      .join("\n");
+    /* ─ 1) Pilih level ─ */
+    const keys = Object.keys(LEVELS);
+    const menu = keys.map(
+      (k, i) => `${i + 1} = ${k.toUpperCase()} (1–${LEVELS[k].max})`
+    ).join("\n");
 
-    const levelInput = prompt(
-      "PILIH LEVEL:\n" + menuText +
-      "\nCancel untuk keluar."
-    );
-    if (levelInput === null) break;
+    const inLvl = prompt("PILIH LEVEL:\n" + menu + "\nCancel = keluar");
+    if (inLvl === null) return;          // user batal di menu
 
-    const idx = parseInt(levelInput) - 1;
-    if (isNaN(idx) || !levelKeys[idx]) {
-      alert("Input tidak valid! Masukkan nomor menu.");
-      continue; // balik ke menu
-    }
+    const idx = parseInt(inLvl) - 1;
+    if (isNaN(idx) || !keys[idx]) { alert("Input salah!"); continue; }
 
-    const { max, lives } = LEVELS[levelKeys[idx]];
+    const { max, lives } = LEVELS[keys[idx]];
     let nyawa = lives;
-    const angkaBenar = Math.floor(Math.random() * max) + 1;
+    const jawaban = Math.floor(Math.random() * max) + 1;
 
-    /* 2) Loop Tebakan */
+    /* ─ 2) Loop tebakan ─ */
     while (nyawa > 0) {
       const t = prompt(`Tebak angka 1–${max}\nNyawa: ${nyawa}`);
       if (t === null) { alert("Menyerah 😢"); break; }
 
       const n = parseInt(t);
       if (isNaN(n) || n < 1 || n > max) {
-        alert(`Masukkan angka 1–${max} yang valid!`);
-        continue;
+        alert("Angka tak valid!"); continue;
       }
 
-      if (n === angkaBenar) {
-        alert("🎉 BENAR! Kamu menang!");
-        break;
-      } else {
-        nyawa--;
-        alert(
-          nyawa
-            ? `${n < angkaBenar ? "Terlalu kecil" : "Terlalu besar"}!\nCoba lagi.`
-            : `😜 GAME OVER!\nJawaban benar: ${angkaBenar}`
-        );
-      }
+      if (n === jawaban) { alert("🎉 BENAR!"); break; }
+
+      nyawa--;
+      alert(n < jawaban ? "Terlalu kecil!" : "Terlalu besar!");
+      if (!nyawa) alert(`Game over! Jawaban: ${jawaban}`);
     }
 
-    /* 3) Tanya main lagi */
+    /* ─ 3) Main lagi? ─ */
     mainLagi = confirm("Main lagi, Kapten?");
   }
 
+  /* ─ 4) Pesan akhir + dialog pindah / tetap ─ */
   alert("Terima kasih sudah bermain! 🎮");
+
+  const balik = confirm(
+    "Apakah Anda mau ke tab awal atau diam di sini?\n" +
+    "OK = ke tab awal  |  Cancel = tetap di sini"
+  );
+
+  if (balik) {
+    window.location.href = "index.html";          // tab saat ini
+    // atau: window.open("index.html", "_blank"); // tab baru
+  } else {
+    alert("Baiklah, kita gabut di sini dulu 😎");
+  }
 }
 
-/* 4) Jalankan game */
+/* ─ 5) Jalankan permainan ─ */
 main();
 </script>
 
 </body>
 </html>
+
 
 
